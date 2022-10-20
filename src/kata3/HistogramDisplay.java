@@ -15,24 +15,29 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HistogramDisplay extends ApplicationFrame {
+    private Histogram<String> histogram;
 
-    /**
-     *
-     */
-    public HistogramDisplay() {
-        super("HISTOGRAMA");
+    public HistogramDisplay(String title, Histogram<String> histogram) {
+        super(title);
+        this.histogram = histogram;
         setContentPane(createPanel());
         pack();
     }
 
-    public void execute(){
-        setVisible(true);
-    }
-    
     private JPanel createPanel() {
         ChartPanel chartPanel = new ChartPanel(createChart(createDataSet()));
         chartPanel.setPreferredSize(new Dimension(500, 400));
         return chartPanel;
+    }
+
+    private DefaultCategoryDataset createDataSet() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (String key : this.histogram.keySet()) {
+            dataset.addValue(this.histogram.get(key), "", key);
+        }
+
+        return dataset;
     }
 
     private JFreeChart createChart(DefaultCategoryDataset dataset) {
@@ -43,18 +48,8 @@ public class HistogramDisplay extends ApplicationFrame {
                 false, false);
         return chart;
     }
-    
-    private DefaultCategoryDataset createDataSet() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(2, "", "ulpgc.es");
-        dataset.addValue(5, "", "yahho.com");
-        dataset.addValue(8, "", "outlook.es");
-        dataset.addValue(5, "", "gmail.com");
-        dataset.addValue(2, "", "hotmail.com");
-        return dataset;
+
+    public void execute(){
+        setVisible(true);
     }
-
-    
-
-        
 }
